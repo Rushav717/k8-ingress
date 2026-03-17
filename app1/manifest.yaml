@@ -31,3 +31,27 @@ spec:
     - protocol: TCP
       port: 80 #service port
       targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app1
+  annotations: 
+   alb.ingress.kubernetes.io/scheme: internet-facing
+   alb.ingress.kubernetes.io/target-type: ip
+   alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+   alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:308731954939:certificate/66b8aa23-46da-440e-a68b-6cbda5f6802c
+   alb.ingress.kubernetes.io/group.name: rushhav717
+spec:
+  ingressClassName: alb
+  rules:
+    - host: app1.rushhav.fun
+      http:
+        paths:
+        - path: "/"
+          pathType: Prefix
+          backend:
+            service:
+              name: app1
+              port:
+                number: 80
